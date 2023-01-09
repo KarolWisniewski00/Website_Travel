@@ -38,6 +38,7 @@
         <!--ZAKŁADKA PO PRAWEJ (ZAWARTOŚĆ)-->
         <div class="col-7">
             @if ($orders == False)
+            <!--EDYCJA KONTA-->
             <ol class="list-group list-group text-break">
                 <li class="list-group-item d-flex justify-content-between align-items-start">
                     <div class="ms-2 me-auto">
@@ -69,6 +70,23 @@
                 <a href="account-delete" class="btn btn-danger m-2">Usuń konto</a>
             </div>
             @else
+            <!--LISTA ZAMÓWIEŃ-->
+            <ol class="list-group list-group text-break">
+                @foreach ($orders_list as $order)
+                <li class="list-group-item d-flex justify-content-between align-items-start">
+                    <div class="ms-2 me-auto">
+                        <div class="fw-bold">{{$trips[intval($order->trip_id)-1]->hotel_name}}, {{$trips[intval($order->trip_id)-1]->country}}</div>
+                        <div><a href="trip-{{$order->trip_id}}" class="btn btn-sm btn-outline-primary">Szczegóły</a></div>
+                        @if ($order->status == 'Opłacono')
+                        {{$order->status}}
+                        @else
+                        <span class="text-danger">{{$order->status}}</span>
+                        @endif
+                    </div>
+                    <span class="badge bg-primary rounded-pill">{{$trips[intval($order->trip_id)-1]->price}} PLN</span>
+                </li>
+                @endforeach
+            </ol>
             @endif
         </div>
     </div>

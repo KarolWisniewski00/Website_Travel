@@ -36,7 +36,11 @@
                     <div class="d-flex justify-content-between align-items-center">
                         <div class="btn-group">
                             <a href="trip-{{$trip->id}}" class="btn btn-sm btn-outline-primary">Szczegóły</a>
-                            <a href="" class="btn btn-sm btn-primary">Zamów</a>
+                            @if(Session::has('login_id'))
+                            <a href="order-{{$trip->id}}" class="btn btn-sm btn-primary">Zamów</a>
+                            @else
+                            <a href="login" class="btn btn-sm btn-primary">Zaloguj się aby zamówić</a>
+                            @endif
                         </div>
                     </div>
                     <div class="text-muted my-2">{{$trip->date_start}} - {{$trip->date_end}}</div>

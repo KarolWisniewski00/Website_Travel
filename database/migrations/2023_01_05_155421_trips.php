@@ -21,7 +21,6 @@ return new class extends Migration
             $table->string('food');
             $table->string('transport');
             $table->string('description');
-            $table->string('status');
             $table->string('path_photo_1');
             $table->string('path_photo_2');
             $table->string('path_photo_3');

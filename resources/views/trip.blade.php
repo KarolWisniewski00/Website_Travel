@@ -59,8 +59,17 @@
             <div class="d-flex flex-column justify-content-center align-items-center text-center mt-4">
                 <div class="d-flex flex-row justify-content-center align-items-center">
                     <h2 class="text-primary m-2">{{$trip->price}} PLN</h2>
-                    <a href="" class="btn btn-sm btn-primary"><h3>Zamów</h3></a>
+                    @if(Session::has('login_id'))
+                    <a href="order-{{$trip->id}}" class="btn btn-sm btn-primary">
+                        <h3>Zamów teraz</h3>
+                    </a>
+                    @else
+                    <a href="login" class="btn btn-sm btn-primary">
+                        <h3>Zaloguj się aby zamówić</h3>
+                    </a>
+                    @endif
                 </div>
+                <p class="text-muted my-4"><span class="text-danger">UWAGA! </span>Wycieczka z ceną dotyczą jednej osoby, jeśli chcesz zamówić wycieczkę dla kilku osób dodaj zamówienie kilka razy</p>
                 <div class="text-muted my-4">{{$trip->date_start}} - {{$trip->date_end}}</div>
                 <div>
                     <p class="card-text">{{$trip->food}}</p>
@@ -73,7 +82,15 @@
                 {{$trip->description}}
             </div>
             <div class="text-center">
-                <a href="" class="btn btn-sm btn-primary"><h1>Zamów teraz</h1></a>
+                @if(Session::has('login_id'))
+                <a href="order-{{$trip->id}}" class="btn btn-sm btn-primary">
+                    <h1>Zamów teraz</h1>
+                </a>
+                @else
+                <a href="login" class="btn btn-sm btn-primary">
+                    <h1>Zaloguj się aby zamówić</h1>
+                </a>
+                @endif
             </div>
         </div>
     </div>

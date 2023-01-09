@@ -81,7 +81,6 @@ class TripController extends Controller
         $trip->food = $request->food;                   //zapisz wyżywienie
         $trip->transport = $request->transport;         //zapisz transport
         $trip->description = $request->description;     //zapisz opis
-        $trip->status = 'N';                            //zapisz status
         $trip->path_photo_1 = $photo_name_1;            //zapisz ścieżkę zdjęcia 1
         $trip->path_photo_2 = $photo_name_2;            //zapisz ścieżkę zdjęcia 2
         $trip->path_photo_3 = $photo_name_3;            //zapisz ścieżkę zdjęcia 3
@@ -157,7 +156,7 @@ class TripController extends Controller
             'date_end' => $request->date_end,
         ]);
 
-        return redirect('admin')->with('success', 'Edycja wycieczki zakończona powodzeniem!');
+        return redirect('admin')->with('success', 'Edycja wycieczki zakończona powodzeniem!');  //zwróć ścieżkę z komunikatem
 
     }
 }

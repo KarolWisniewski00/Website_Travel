@@ -41,7 +41,7 @@
             <h1 class="display-5 fw-bold lh-1 mb-3">Odkrywaj świat razem z nami!</h1>
             <p class="lead">Zapraszamy na niezapomniane wakacje pełne przygód, poznawania nowych kultur i odkrywania nieznanych dotąd miejsc. Nasza oferta obejmuje szeroki wybór wycieczek do różnych zakątków świata, dzięki czemu z pewnością znajdziesz coś dla siebie.</p>
             <div class="d-grid gap-2 d-md-flex justify-content-md-start">
-                <button type="button" class="btn btn-primary btn-lg px-4 me-md-2">Zobacz naszą ofertę</button>
+                <a href="trips" class="btn btn-primary btn-lg px-4 me-md-2">Zobacz naszą ofertę</a>
             </div>
         </div>
     </div>
@@ -63,7 +63,11 @@
                     <div class="d-flex justify-content-between align-items-center">
                         <div class="btn-group">
                             <a href="trip-{{$trip->id}}" class="btn btn-sm btn-outline-primary">Szczegóły</a>
-                            <a href="" class="btn btn-sm btn-primary">Zamów</a>
+                            @if(Session::has('login_id'))
+                            <a href="order-{{$trip->id}}" class="btn btn-sm btn-primary">Zamów</a>
+                            @else
+                            <a href="login" class="btn btn-sm btn-primary">Zaloguj się aby zamówić</a>
+                            @endif
                         </div>
                     </div>
                     <div class="text-muted my-2">{{$trip->date_start}} - {{$trip->date_end}}</div>
@@ -90,7 +94,11 @@
                     <div class="d-flex justify-content-between align-items-center">
                         <div class="btn-group">
                             <a href="trip-{{$trip->id}}" class="btn btn-sm btn-outline-primary">Szczegóły</a>
-                            <a href="" class="btn btn-sm btn-primary">Zamów</a>
+                            @if(Session::has('login_id'))
+                            <a href="order-{{$trip->id}}" class="btn btn-sm btn-primary">Zamów</a>
+                            @else
+                            <a href="login" class="btn btn-sm btn-primary">Zaloguj się aby zamówić</a>
+                            @endif
                         </div>
                     </div>
                     <div class="text-muted my-2">{{$trip->date_start}} - {{$trip->date_end}}</div>

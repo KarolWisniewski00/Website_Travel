@@ -13,8 +13,6 @@
 
 @section('content')
 <div class="container">
-    <!--ALBUM-->
-    <h1 class="my-5">Wszystkie Wycieczki</h1>
     <!--ALERTY-->
     @if(Session::has('success'))
     <div class="alert alert-success">{{Session::get('success')}}</div>
@@ -23,6 +21,39 @@
     @if(Session::has('fail'))
     <div class="alert alert-danger">{{Session::get('fail')}}</div>
     @endif
+    <!--ZAMÓWIENIA-->
+    <h1 class="my-5">Wszystkie Zamówienia</h1>
+    <div class="row">
+        <div class="col-12">
+            <ol class="list-group list-group text-break">
+                @foreach ($orders_list as $order)
+                <li class="list-group-item d-flex justify-content-between align-items-start">
+                    <div class="ms-2 me-auto">
+                        <div class="fw-bold">{{$trips[intval($order->trip_id)-1]->hotel_name}}, {{$trips[intval($order->trip_id)-1]->country}}</div>
+                        @if ($order->status == 'Opłacono')
+                        <div>
+                            <a href="status-Nie opłacono-{{$order->id}}" class="btn btn-sm btn-outline-danger">Nie opłacono</a>
+                        </div>
+                        @else
+                        <div>
+                            <a href="status-Opłacono-{{$order->id}}" class="btn btn-sm btn-outline-primary">Opłacono</a>
+                        </div>
+                        @endif
+                        <div>{{$users[intval($order->user_id)-1]->name}} {{$users[intval($order->user_id)-1]->surname}}</div>
+                        @if ($order->status == 'Opłacono')
+                        {{$order->status}}
+                        @else
+                        <span class="text-danger">{{$order->status}}</span>
+                        @endif
+                    </div>
+                    <span class="badge bg-primary rounded-pill">{{$trips[intval($order->trip_id)-1]->price}} PLN</span>
+                </li>
+                @endforeach
+            </ol>
+        </div>
+    </div>
+    <!--ALBUM-->
+    <h1 class="my-5">Wszystkie Wycieczki</h1>
     <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
         <!--DODAJ NOWE-->
         <div class="col">

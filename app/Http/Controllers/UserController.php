@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\User;
+use App\Models\Order;
+use App\Models\Trip;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
 
@@ -58,7 +60,6 @@ class UserController extends Controller
         $user->email = $request->email;                     //zapisz email
         $user->password = Hash::make($request->password);   //zapisz zaszyfrowane hasło korzystając z wbudowanej (w Laravel) metody make z klasy Hash
         $user->admin = false;                               //zapisz brak admina
-        $user->trips = '';                                  //zapisz puste zamówienia
         $res = $user->save();                               //ZAPISZ REKORD W BAZIE DANYCH
 
         if ($res) {
@@ -81,7 +82,7 @@ class UserController extends Controller
     public function account(){
         $user = $this->get_user();  //Pobierz dane zalogowanego użytkownika
 
-        return view('account',[
+        return view('account.account',[
             'user'=>$user,
             'orders'=>False
         ]);
@@ -91,7 +92,7 @@ class UserController extends Controller
     public function account_edit(){
         $user = $this->get_user();  //Pobierz dane zalogowanego użytkownika
 
-        return view('account_edit',[
+        return view('account.edit',[
             'user'=>$user,
         ]);
     }
@@ -123,23 +124,44 @@ class UserController extends Controller
 
     /*KONTO USUWANIE FUNKCJONALNOŚĆ*/
     public function account_delete(){
-        $user = $this->get_user();                      //Pobierz dane zalogowanego użytkownika
+        $user = $this->get_user();                                              //Pobierz dane zalogowanego użytkownika
 
-        if (Session::has('login_id')){                  //sprawdź czy zmienna sesyjna jest ustawiona - NAJPIERW WYLOGOWANIE
-            Session::pull('login_id');                  //jeśli tak to usuń zmienną sesyjną
+        if (Session::has('login_id')){                                          //sprawdź czy zmienna sesyjna jest ustawiona - NAJPIERW WYLOGOWANIE
+            Session::pull('login_id');                                          //jeśli tak to usuń zmienną sesyjną
             Session::pull('admin');
         }
-        User::where('id', '=', $user->id)->delete();    //usunięcie konta
-        return redirect('/')->with('success', 'Usunąłeś konto z powodzeniem!');
+        User::where('id', '=', $user->id)->delete();                            //usunięcie konta
+        return redirect('/')->with('success', 'Usunąłeś konto z powodzeniem!'); //zwróć ścieżkę z komunikatem
     }
 
     /*KONTO ZAMÓWIENIA WIDOK*/
-    public function account_orders(){
-        $user = $this->get_user();  //Pobierz dane zalogowanego użytkownika
+    public function account_order(){
+        $user = $this->get_user();                                  //Pobierz dane zalogowanego użytkownika
+        $orders = Order::where('user_id', '=', $user->id)->get();   //Pobierz dane zamówień zalogowanego użytkownika
+        $trips = Trip::get();                                       //Pobierz wszystkie wycieczki
 
-        return view('account',[
+        return view('account.account',[                                     //zwróć widok z parametrami
             'user'=>$user,
-            'orders'=>True
+            'orders'=>True,
+            'orders_list'=>$orders,
+            'trips'=>$trips
         ]);
+    }
+
+    /*KONTO ZAMÓWIENIA FUNKCJONALNOŚĆ*/
+    public function account_order_user($trip_id){   //Przyjmowany argument id pochodzi z ścieżki
+        $user = $this->get_user();                  //Pobierz dane zalogowanego użytkownika
+
+        $order = new Order();                       //utwórz nowy obiekt korzystając z klasy Order (model)
+        $order->user_id = $user->id;                //zapisz id użytkownika
+        $order->trip_id = $trip_id;                 //zapisz id wycieczki
+        $order->status = 'Brak opłaty';             //zapisz domyślny status wycieczki
+        $res = $order->save();                      //zapisz rekord w bazie danych
+
+        if ($res) {                                 //zwróć ścieżkę z komunikatem
+            return redirect('account-orders')->with('success', 'Zamówiłeś wycieczkę z powodzeniem, opłać wakacje w naszym punkcie stacjonarnym!');
+        } else {
+            return back()->with('fail', 'Coś poszło nie tak!');
+        }
     }
 }

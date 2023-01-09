@@ -8,6 +8,7 @@ use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Routing\Controller as BaseController;
 use App\Models\User;
 use App\Models\Trip;
+use App\Models\Order;
 use Illuminate\Support\Facades\Session;
 
 class Controller extends BaseController
@@ -77,10 +78,21 @@ class Controller extends BaseController
     public function admin(){
         $user = $this->get_user();  //Pobierz dane zalogowanego użytkownika
         $trips = Trip::get();       //Pobierz wszystkie wycieczki
+        $orders = Order::get();     //Pobierz wszystkie zamówienia
+        $users = User::get();       //Pobierz wszystkich użytkowników
 
         return view('admin.admin',[ //Zwróć widok z parametrami
             'user'=>$user,
-            'trips'=>$trips
+            'trips'=>$trips,
+            'orders_list'=>$orders,
+            'users'=>$users
         ]);
+    }
+    /*ZMIANA STATUSU ZAMÓWIONEJ WYCIECZKI FUNKCJONALNOŚĆ*/
+    public function order_status($status,$id){  //Przyjmowany argument id pochodzi z ścieżki
+        Order::where('id', '=', $id)->update([  //Aktualizacja statusu w bazie danych
+            'status' => $status,
+        ]);
+        return redirect('admin')->with('success', 'Edycja wycieczki zakońcona powodzeniem!');   //zwróć ścieżkę z komunikatem
     }
 }
