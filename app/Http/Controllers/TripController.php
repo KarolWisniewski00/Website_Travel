@@ -8,14 +8,14 @@ use Illuminate\Http\Request;
 class TripController extends Controller
 {
     /*FUNKCJA DO PODMIANY ZDJĘĆ*/
-    public function update_photo($photo, $request){
+    public function update_photo($photo, $request, $path){
         if ($photo != null){
             $trip = Trip::where('id', '=', $request->id)->first();              //Pobierz dane o wycieczce z bazy danych
-            unlink(public_path().'\assets\\'.$trip->path_photo_1);              //usuń stare zdjęcie 1
-            $photo_name_1 = time().'.'.$photo->getClientOriginalName();         //zapisanie nazwy pliku w zmiennej
-            $photo->move(public_path('/assets'), $photo_name_1);                //przeniesienie zdjęcia do folderu public/assets
+            unlink(public_path().'\assets\\'.$trip->$path);              //usuń stare zdjęcie 1
+            $photo_name = time().'.'.$photo->getClientOriginalName();         //zapisanie nazwy pliku w zmiennej
+            $photo->move(public_path('/assets'), $photo_name);                //przeniesienie zdjęcia do folderu public/assets
             Trip::where('id', '=', $request->id)->update([                      //aktualizacja bazy
-                'path_photo_1' => $photo_name_1,
+                $path => $photo_name,
             ]);
         }
     }
@@ -137,13 +137,13 @@ class TripController extends Controller
         ]);
 
         $photo_1 = request()->file('photo_1');                                  //zapisanie zdjęcia w zmiennej
-        $this->update_photo($photo_1, $request);                                //podmiana zdjęcia
+        $this->update_photo($photo_1, $request,'path_photo_1');                                //podmiana zdjęcia
         
         $photo_2 = request()->file('photo_2');                                  //zapisanie zdjęcia w zmiennej
-        $this->update_photo($photo_1, $request);                                //podmiana zdjęcia
+        $this->update_photo($photo_2, $request, 'path_photo_2');                                //podmiana zdjęcia
 
         $photo_3 = request()->file('photo_3');                                  //zapisanie zdjęcia w zmiennej
-        $this->update_photo($photo_1, $request);                                //podmiana zdjęcia
+        $this->update_photo($photo_3, $request,'path_photo_3');                                //podmiana zdjęcia
 
         Trip::where('id', '=', $request->id)->update([                          //aktualizacja bazy
             'hotel_name' => $request->hotel,

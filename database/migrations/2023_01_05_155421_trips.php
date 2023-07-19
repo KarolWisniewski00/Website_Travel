@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('country');
             $table->string('food');
             $table->string('transport');
-            $table->string('description');
+            $table->string('description', 10000);
             $table->string('path_photo_1');
             $table->string('path_photo_2');
             $table->string('path_photo_3');
